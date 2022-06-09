@@ -23,31 +23,10 @@ exports.store = (req, res) => {
 
 exports.update = (req, res) => {
     const filter = {
-        id: req.body.id
-    };
-    const update = {
-        brand_id: req.body.brand_id,
-        brand_version: req.body.brand_version,
-        user_id: req.body.user_id,
-        name: req.body.name,
-        material_id: req.body.material_id,
-        builder_customization: req.body.builder_customization,
-        sport: req.body.sport,
-        front_thumbnail: req.body.front_thumbnail,
-        back_thumbnail: req.body.back_thumbnail,
-        left_thumbnail: req.body.left_thumbnail,
-        right_thumbnail: req.body.right_thumbnail,
-        low_res_front_thumbnail: req.body.low_res_front_thumbnail,
-        low_res_back_thumbnail: req.body.low_res_back_thumbnail,
-        low_res_left_thumbnail: req.body.low_res_left_thumbnail,
-        low_res_right_thumbnail: req.body.low_res_right_thumbnail,
-        notes: req.body.notes,
-        order_id: req.body.order_id,
-        public: req.body.public,
-        test_data: req.body.test_data
+        _id: req.body.id
     };
 
-    ITEM_WEIGHTS.findOneAndUpdate(filter, update, { new: true }, (error, weight) => {
+    ITEM_WEIGHTS.findOneAndUpdate(filter, req.body, { new: true }, (error, weight) => {
         if (error) {
             return res.status(400).send({ 
                 success: false, 
