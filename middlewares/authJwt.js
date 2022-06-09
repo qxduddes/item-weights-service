@@ -1,48 +1,3 @@
-## Shipping Item Weights Service
-This application is built with Nodejs/Express, MongoDB and JWTAuth
-
-Requirements:
-- node v17.0.1
-- npm v8.1.0
-- bcryptjs v2.4.3
-- cognito-express v3.0.1
-- cors v2.8.5
-- express v4.18.1
-- jsonwebtoken v8.5.1
-- mongoose v6.3.4
-- mongoose-paginate-v2 v1.6.3
-
-Database
-- mongodb 5.0.2
-
-## Installation
-```
-npm install 
-npm run start
-```
-
-## Environment Variables
-```
-MONGODB_HOST=mongodb
-MONGODB_USER=root
-MONGODB_PASSWORD=root
-MONGODB_DATABASE=item_weights_db
-MONGODB_LOCAL_PORT=7017
-MONGODB_DOCKER_PORT=27017
-
-NODE_LOCAL_PORT=6868
-NODE_DOCKER_PORT=8080
-
-AWS_DEFAULT_REGION=ap-southeast-1
-COGNITO_USER_POOL_ID=ap-southeast-1_4smUbwOvs
-COGNITO_ENABLED=false
-
-PAGE_LIMIT=15
-```
-
-## Middleware
-All route access are being verified via middleware to validate if user has a valid access token from JWT or Cognito authentication during api access.
-```
 const JWT = require('jsonwebtoken');
 const CONFIG = require('../config/auth.config');
 const DB = require('../models');
@@ -131,19 +86,3 @@ const authJwt = {
 };
 
 module.exports = authJwt;
-```
-
-## Usage
-
-**Store New Item Weights**
-```
-POST /api/item-weights
-```
-**Update Item Weights**
-```
-PUT /api/item-weights
-```
-**Get Item Weights**
-```
-GET /api/item-weights
-```
