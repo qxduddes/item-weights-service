@@ -2,28 +2,7 @@ const req = require("express/lib/request");
 const ITEM_WEIGHTS = require('../models/itemWeights.model');
 
 exports.store = (req, res) => {
-    const weight = new ITEM_WEIGHTS({
-        id: req.body.id,
-        brand_id: req.body.brand_id,
-        brand_version: req.body.brand_version,
-        user_id: req.body.user_id,
-        name: req.body.name,
-        material_id: req.body.material_id,
-        builder_customization: req.body.builder_customization,
-        sport: req.body.sport,
-        front_thumbnail: req.body.front_thumbnail,
-        back_thumbnail: req.body.back_thumbnail,
-        left_thumbnail: req.body.left_thumbnail,
-        right_thumbnail: req.body.right_thumbnail,
-        low_res_front_thumbnail: req.body.low_res_front_thumbnail,
-        low_res_back_thumbnail: req.body.low_res_back_thumbnail,
-        low_res_left_thumbnail: req.body.low_res_left_thumbnail,
-        low_res_right_thumbnail: req.body.low_res_right_thumbnail,
-        notes: req.body.notes,
-        order_id: req.body.order_id,
-        public: req.body.public,
-        test_data: req.body.test_data
-    });
+    const weight = new ITEM_WEIGHTS(req.body);
 
     weight.save((err, weights) => {
         if (err) {
@@ -133,8 +112,8 @@ exports.get = (req, res) => {
 };
 
 exports.getById = (req, res) => {
-    console.log('id: ' + req.query.material_id);
-    ITEM_WEIGHTS.find({ id: req.params.id}, (error, weights) => {
+    console.log('_id: ' + req.query.material_id);
+    ITEM_WEIGHTS.find({ _id: req.params.id}, (error, weights) => {
         if (error) {
             return res.status(400).send({ 
                 success: false, 

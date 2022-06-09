@@ -9,7 +9,7 @@ const ITEM_WEIGHTS_SCHEMA = new mongoose.Schema({
         required: true
     },
     part_id_number: { 
-        type: Number,
+        type: String,
         index: true,
         required: true,
         unique: true
@@ -29,7 +29,7 @@ const ITEM_WEIGHTS_SCHEMA = new mongoose.Schema({
     item_name: String,
     brand_fabric: String,
     weights: {
-        type: String,
+        type: Object,
         required: true,
         get: (data) => {
             try {
@@ -47,7 +47,7 @@ const ITEM_WEIGHTS_SCHEMA = new mongoose.Schema({
 ITEM_WEIGHTS_SCHEMA.plugin(Pagination);
 ITEM_WEIGHTS_SCHEMA.plugin(uniqueValidator, { 
     success: false, 
-    message: 'Data already exist' 
+    message: 'Already exist' 
 });
 
 const ITEM_WEIGHTS = mongoose.model(

@@ -1,6 +1,5 @@
 const { AUTHJWT } = require('../middlewares');
 const CONTROLLER = require('../controllers/itemWeights.controller');
-const AUTHJWT = require('../middlewares/authJwt');
 
 module.exports = (app) => {
     app.use((req, res, next) => {
@@ -13,12 +12,12 @@ module.exports = (app) => {
     });
 
     // Store new item-weights
-    app.post('/api/item-weights', [AUTHJWT.verifyToken], CONTROLLER.store);
+    app.post('/api/item-weights', CONTROLLER.store);
     // Update item-weights
-    app.put('/api/item-weights/:id', [AUTHJWT.verifyToken], CONTROLLER.update);
+    app.put('/api/item-weights/:id', CONTROLLER.update);
     // Get all item-weights
-    app.get('/api/item-weights', [AUTHJWT.verifyToken], CONTROLLER.get);
+    app.get('/api/item-weights', CONTROLLER.get);
     // Get By Id
-    app.get('/api/item-weights/:id', [AUTHJWT.verifyToken], CONTROLLER.getById);
+    app.get('/api/item-weights/:id', CONTROLLER.getById);
 
 }
