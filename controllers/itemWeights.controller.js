@@ -53,25 +53,46 @@ exports.get = (req, res) => {
 
     let aggregateQuery = ITEM_WEIGHTS.aggregate();
 
-    if (req.query.material_id && req.query.material_id > 0) {
-        console.log('material id: '+ req.query.material_id);
-        aggregateQuery = ITEM_WEIGHTS.aggregate([{ $match: { material_id: parseInt(req.query.material_id) } }]);
+    if (req.query.factory && req.query.factory.length > 0) {
+        console.log('Filter By Factory: '+ req.query.factory);
+        aggregateQuery = ITEM_WEIGHTS.aggregate([{ $match: { factory: parseInt(req.query.factory) } }]);
     }
 
-    if (req.query.user_id && req.query.user_id > 0) {
-        console.log('user id: '+ req.query.user_id);
-        aggregateQuery = ITEM_WEIGHTS.aggregate([{ $match: { user_id: parseInt(req.query.user_id) } }]);
-    }
-
-    if (req.query.brand && req.query.brand !== null) {
-        console.log('brand: '+ req.query.brand);
+    if (req.query.brand && req.query.brand.length > 0) {
+        console.log('Filter By Brand: '+ req.query.brand);
         aggregateQuery = ITEM_WEIGHTS.aggregate([{ $match: { brand: parseInt(req.query.brand) } }]);
     }
 
-    if (req.query.order_id && req.query.order_id > 0) {
-        console.log('order id: '+ req.query.order_number);
+    if (req.query.sport && req.query.sport.length > 0) {
+        console.log('Filter By Sport: '+ req.query.sport);
+        aggregateQuery = ITEM_WEIGHTS.aggregate([{ $match: { sport: parseInt(req.query.sport) } }]);
+    }
+
+    if (req.query.fabric && req.query.fabric.length > 0) {
+        console.log('Filter By fabric: '+ req.query.fabric);
+        aggregateQuery = ITEM_WEIGHTS.aggregate([{ $match: { fabric: parseInt(req.query.fabric) } }]);
+    }
+
+    if (req.query.item && req.query.item.length > 0) {
+        console.log('Filter By Item: '+ req.query.item);
+        aggregateQuery = ITEM_WEIGHTS.aggregate([{ $match: { item: parseInt(req.query.item) } }]);
+    }
+
+    if (req.query.order_number && req.query.order_number.length > 0) {
+        console.log('Filter By Order Number: '+ req.query.order_number);
         aggregateQuery = ITEM_WEIGHTS.aggregate([{ $match: { order_number: parseInt(req.query.order_number) } }]);
     }
+
+    if (req.query.part_id_number && req.query.part_id_number.length > 0) {
+        console.log('Filter By part_id_number: '+ req.query.part_id_number);
+        aggregateQuery = ITEM_WEIGHTS.aggregate([{ $match: { part_id_number: parseInt(req.query.part_id_number) } }]);
+    }
+
+    // TODO: Find a way to search data inside object
+    // if (req.query.sizes && req.query.sizes.length > 0) {
+    //     console.log('Filter By sizes: '+ req.query.sizes);
+    //     aggregateQuery = ITEM_WEIGHTS.aggregate([{ $match: { weights.sizes: parseInt(req.query.sizes) } }]);
+    // }
     
     ITEM_WEIGHTS.aggregatePaginate(aggregateQuery, { page: currentPage, limit: pageLimit }, (err, result) => {
         if (err) {
