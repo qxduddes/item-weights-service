@@ -1,3 +1,4 @@
+require('dotenv').config();
 const JWT = require('jsonwebtoken');
 const CONFIG = require('../config/auth.config');
 const DB = require('../models');

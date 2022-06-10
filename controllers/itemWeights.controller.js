@@ -1,3 +1,4 @@
+require('dotenv').config();
 const req = require("express/lib/request");
 const ITEM_WEIGHTS = require('../models/itemWeights.model');
 

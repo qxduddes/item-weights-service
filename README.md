@@ -23,6 +23,7 @@ npm run start
 
 ## Environment Variables
 ```
+# MongoDB Connection
 MONGODB_HOST=mongodb
 MONGODB_USER=root
 MONGODB_PASSWORD=root
@@ -30,14 +31,20 @@ MONGODB_DATABASE=item_weights_db
 MONGODB_LOCAL_PORT=7017
 MONGODB_DOCKER_PORT=27017
 
+# Live MongoDB Connection
+MONGODB_URI=
+MONGODB_ENV=local
+
 NODE_LOCAL_PORT=6868
 NODE_DOCKER_PORT=8080
 
-AWS_DEFAULT_REGION=ap-southeast-1
-COGNITO_USER_POOL_ID=ap-southeast-1_4smUbwOvs
+# Aws Cognito Authentication
+AWS_DEFAULT_REGION=
+COGNITO_USER_POOL_ID=
 COGNITO_ENABLED=false
 
-PAGE_LIMIT=15
+# Pagination
+PAGE_LIMIT=2
 ```
 
 ## Middleware

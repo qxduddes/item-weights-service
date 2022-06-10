@@ -19,13 +19,15 @@ const { disabled } = require("express/lib/application");
 const Role = db.ROLE;
 
 // Initialize mongodb connection
+const mongoDbEnv = process.env.MONGODB_ENV;
+const mongoDBConnection = mongoDbEnv === "local" ? dbConfig.local : dbConfig.live;
 db.mongoose
-  .connect(dbConfig.url, {
+  .connect(mongoDBConnection, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
   .then(() => {
-    console.log('Successfully connected to MongoDB');
+    console.log('Successfully connected to MongoDB ' + mongoDbEnv);
     initial();
   })
   .catch(err => {
