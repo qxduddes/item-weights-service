@@ -1,4 +1,5 @@
 require('dotenv').config();
+const logger = require('../utils/logger');
 const req = require("express/lib/request");
 const ITEM_WEIGHTS = require('../models/itemWeights.model');
 
@@ -7,6 +8,7 @@ exports.store = (req, res) => {
 
     weight.save((err, weights) => {
         if (err) {
+            logger.error(`Error: ${req.ip} - ${req.method}/${req.status || 400} ${req.originalUrl} - ${err.message}`);
             return res.status(400).send({ 
                 success: false, 
                 status: 400, 
@@ -27,8 +29,9 @@ exports.update = (req, res) => {
         _id: req.body.id
     };
 
-    ITEM_WEIGHTS.findOneAndUpdate(filter, req.body, { new: true }, (error, weight) => {
-        if (error) {
+    ITEM_WEIGHTS.findOneAndUpdate(filter, req.body, { new: true }, (err, weight) => {
+        if (err) {
+            logger.error(`Error: ${req.ip} - ${req.method}/${req.status || 400} ${req.originalUrl} - ${err.message}`);
             return res.status(400).send({ 
                 success: false, 
                 status: 400, 
@@ -118,6 +121,7 @@ exports.get = (req, res) => {
     
     ITEM_WEIGHTS.aggregatePaginate(aggregateQuery, options, (err, result) => {
         if (err) {
+            logger.error(`Error: ${req.ip} - ${req.method}/${req.status || 400} ${req.originalUrl} - ${err.message}`);
             return res.status(400).send({
                 success: false,
                 status: 400,
@@ -134,9 +138,10 @@ exports.get = (req, res) => {
 };
 
 exports.getById = (req, res) => {
-    console.log('_id: ' + req.query.material_id);
-    ITEM_WEIGHTS.find({ _id: req.params.id}, (error, weights) => {
-        if (error) {
+    logger.info('_id: ' + req.params.id);
+    ITEM_WEIGHTS.find({ _id: req.params.id}, (err, weights) => {
+        if (err) {
+            logger.error(`Error: ${req.ip} - ${req.method}/${req.status || 400} ${req.originalUrl} - ${err.message}`);
             return res.status(400).send({ 
                 success: false, 
                 status: 400, 

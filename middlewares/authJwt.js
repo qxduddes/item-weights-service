@@ -1,23 +1,26 @@
 require('dotenv').config();
+const logger = require('../utils/logger');
 const JWT = require('jsonwebtoken');
 const CONFIG = require('../config/auth.config');
 const DB = require('../models');
 const CognitoExpress = require('cognito-express');
+const cognitoAuthEnabled = process.env.COGNITO_ENABLED;
 
 const USER = DB.USER;
 const ROLE = DB.ROLE;
 
-const cognitoExpress = new CognitoExpress({
-    region: process.env.AWS_DEFAULT_REGION,
-    cognitoUserPoolId: process.env.COGNITO_USER_POOL_ID,
-    tokenUse: "access",
-    tokenExpiration: 3600
-});
+if (cognitoAuthEnabled === "true") {
+    const cognitoExpress = new CognitoExpress({
+        region: process.env.AWS_DEFAULT_REGION,
+        cognitoUserPoolId: process.env.COGNITO_USER_POOL_ID,
+        tokenUse: "access",
+        tokenExpiration: 3600
+    });
+}
 
 verifyToken = (req, res, next) => {
     let authorizationBearer = req.headers.authorization;
     let token = authorizationBearer.split(' ')[1];
-    const cognitoEnabled = process.env.COGNITO_ENABLED;
 
     if (!token) {
         return res.status(403).send({
@@ -27,7 +30,8 @@ verifyToken = (req, res, next) => {
         });
     }
 
-    if (cognitoEnabled === "true") {
+    if (cognitoAuthEnabled === "true") {
+        logger.info('Authentication: Cognito');
         cognitoExpress.validate(token, (error, response) => {
             if (error) {
                 return res.status(403).send({
@@ -41,6 +45,7 @@ verifyToken = (req, res, next) => {
         });
 
     } else {
+        logger.info('Authentication: Jwt');
         JWT.verify(token, CONFIG.secret, (err, decoded) => {
             if (err) {
                 return res.status(401).send({ 
@@ -59,7 +64,7 @@ verifyToken = (req, res, next) => {
 isAdmin = (req, res, next) => {
     USER.findById(req.userId).exec((err, user) => {
         if (err) {
-            console.log('error: '+ err);
+            logger.error('Error: isAdmin middleware - '+ err);
             return res.status(500).send({ message: err });
         }
 

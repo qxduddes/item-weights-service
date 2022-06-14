@@ -24,7 +24,10 @@
     "mongoose": "^6.3.4",
     "mongoose-aggregate-paginate-v2": "^1.0.6",
     "mongoose-unique-validator": "^3.1.0",
+    "morgan": "^1.10.0",
     "nodemon": "^2.0.16",
-    "npm": "^8.12.1"
+    "npm": "^8.12.1",
+    "winston": "^3.7.2",
+    "winston-daily-rotate-file": "^4.7.1"
   }
 }

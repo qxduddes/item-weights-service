@@ -1,13 +1,26 @@
-const express = require("express");
+require("dotenv").config();
+const logger = require("./utils/logger");
+const morgan = require('morgan');
+const fs = require('fs');
+const path = require('path');
 const cors = require("cors");
 const dbConfig = require('./config/db.config');
-
+const corsOrigin = process.env.NODE_CORS;
+const express = require("express");
 const app = express();
 
+const accessStream = fs.WriteStream(path.join(__dirname, 'logs/access.log'), { flag: 'a'});
+
 var corsOptions = {
-  origin: "http://localhost:8080"
+  origin: corsOrigin || "http://localhost:8080"
 };
 
+
+logger.info('Cors Origin: ' + corsOptions.origin);
+
+// access logs
+app.use(morgan('combined', { stream: accessStream }));
+// Cors Origin
 app.use(cors(corsOptions));
 // parse requests of content-type - application/json
 app.use(express.json({limit: '25mb'}));
@@ -27,17 +40,18 @@ db.mongoose
     useUnifiedTopology: true
   })
   .then(() => {
-    console.log('Successfully connected to MongoDB ' + mongoDbEnv);
+    logger.info(`Successfully connected to MongoDB @ ${mongoDbEnv}`);
     initial();
   })
   .catch(err => {
+    logger.error('MongoDB: Connection error - ' + err);
     console.log('Connection error', err);
     process.exit();
   });
 
 // simple route
 app.get("/", (req, res) => {
-    res.json({ message: "Welcome to Shipping Item Weights Service." });
+    res.status(200).send({ message: "Welcome to Shipping Item Weights Service." });
   });
   
 // Routes
@@ -45,10 +59,17 @@ require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
 require('./routes/itemWeights.routes')(app);
 
+// Error Logger
+const errorLogger = (error, request, response, next) => {
+  logger.error(`Error: ${request.ip} - ${request.method}/${request.status || 500} ${request.originUrl} - ${error.message}`);
+  next(error);
+};
+app.use(errorLogger); 
+
 // set port, listen for requests
 const PORT = process.env.NODE_DOCKER_PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+  logger.info(`Server is running on port ${PORT}.`);
 });
 
 function initial() {
